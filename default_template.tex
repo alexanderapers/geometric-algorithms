@@ -1,0 +1,45 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.54cm]{geometry}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{commath,mathtools}
+\usepackage{parskip}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage[english]{babel}
+\usepackage{fancyhdr}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{csquotes}
+\usepackage{lipsum}
+\usepackage{comment}
+\usepackage{authblk}
+\usepackage[bookmarksnumbered]{hyperref}
+
+% 20 most commonly used fonts:
+% https://www.draketo.de/anderes/latex-fonts.html#orge83df8b
+
+% roman: \rmdefault, sans serif: \sfdefault
+\renewcommand{\familydefault}{\rmdefault}
+
+\pagestyle{fancy}
+
+
+\title{\huge{My document title}}
+\author{Alexander Apers}
+\affil{\small{Utrecht University\\ \href{a.p.apers@uu.nl}{a.p.apers@uu.nl}}}
+\date{\today}
+
+\setcounter{secnumdepth}{2}
+
+\begin{document}
+    \maketitle
+    \tableofcontents
+
+    \section{Introduction}
+    \lipsum
+
+\end{document}
