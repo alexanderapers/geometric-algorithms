@@ -18,17 +18,20 @@
 \usepackage{comment}
 \usepackage{authblk}
 \usepackage[bookmarksnumbered]{hyperref}
+% \usepackage{algorithm}
+\usepackage[linesnumbered,ruled]{algorithm2e}
 
 % 20 most commonly used fonts:
 % https://www.draketo.de/anderes/latex-fonts.html#orge83df8b
 
 % roman: \rmdefault, sans serif: \sfdefault
-\renewcommand{\familydefault}{\rmdefault}
+\renewcommand{\familydefault}{\sfdefault}
 
 \pagestyle{fancy}
+\newtheorem{theorem}{Theorem}
+\newcommand{\CH}{\mathcal{C}\mathcal{H}}
 
-
-\title{\huge{My document title}}
+\title{\huge{Geometric Algorithms \\ Homework Exam 1}}
 \author{Alexander Apers \\ 6272932}
 \affil{\small{Utrecht University\\ \href{a.p.apers@uu.nl}{a.p.apers@uu.nl}}}
 \date{\today}
@@ -37,9 +40,93 @@
 
 \begin{document}
     \maketitle
-    \tableofcontents
+    % \tableofcontents
 
-    \section{Introduction}
-    \lipsum
+    % TODO add question
+    % TODO add figures
+    \section*{Question 1}
+    \subsection*{Definitions}
+    Let $A$ denote the set $\{r\} \cup B$ \\
+    Let $\CH(A)$ denote the convex hull of point set $A$ (including interior and edges) \\
+    Let CH($A$) denote the set of vertices that make up the edges of $\CH(A)$
+
+    \subsection*{Geometric Observations}
+    Since there is only one red point, it is clear that all bichromatic triangles contain exactly one red point and two blue points.
+    We start with the following observation. \\
+
+    \begin{theorem}
+    The maximum area bichromatic triangle must necessarily consist of 2 blue vertices, $b_1, b_2$ such that $b_1, b_2 \in$ CH($A$).
+    \end{theorem}
+
+    \begin{proof}
+        Suppose for contradiction that $b_1 \notin$ CH($A$). We denote the maximum area triangle $\triangle rb_1b_2$.
+        % We denote this triangle $\triangle rb_{1}b_{2}$, with the point $b_{2}$ not on the boundary of $\CH(A)$.
+        We will show that the area of $\triangle rb_1b_2$ can be increased by using a vertex $x \in$ CH($A$) instead of $b_1$.
+        Imagine the line $l$ parallel to the line going through $r$ and $b_{2}$ which goes through the point $b_{1}$.
+        If we replace $b_{1}$ with a point on the other side of $l$ compared to where $r$ and $b_{2}$ are, the area of $\triangle rb_1b_2$ will increase.
+        $l$ must cross the boundary of the convex hull in 2 locations since $b_1 \in \CH(A)$ but $b_1 \notin$ CH($A$).
+        Therefore, it's guaranteed that $b_{1}$ can be replaced by at least one point $x \in$ CH($A$) so that the area of $\triangle rxb_2 > \triangle rb_1b_2$.
+        Hence, $\triangle rb_{1}b_{2}$ is not a maxmium area triangle. This is a contradiction. 
+        We conclude that $b_1 \in$ CH($A$) to be a maximum area triangle. 
+    \end{proof}
+
+    Similarly, it can be proven that $b_2 \in$ CH($A$).
+
+    \vspace{0.5cm}
+    \begin{theorem}
+        Given point $r$ and a point $b_1 \in$ CH($A$), and line $l$ going through them, 
+        TriangleArea($\triangle rb_1b_2$) is a unimodal function for $b_2 \in$ CH($A$) on one side of $l$.
+    \end{theorem}
+
+    \begin{proof}
+        The area of $\triangle rb_1b_2$
+    \end{proof}
+
+    \subsection*{Algorithm Description}
+    % TODO add reference to algorithm
+    Finding the vertices that make up the boundary of the convex hull can be done in $O(n\log n)$ time complexity. 
+    These vertices will be given in clockwise (or counterclockwise) order. 
+
+    \begin{algorithm}[H]
+        \SetKwInOut{Input}{Input}
+        \SetKwInOut{Output}{Output}
+    
+        \Input{$r, B,$ CH($A$) as an array sorted clockwise of size $m$}
+        \Output{Maximum Area Bichromatic Triangle}
+        MaxArea $\gets 0$ \\
+        MaxAreaTriangle $\gets \triangle$ \\
+        \For{$k \gets 1$ \KwTo $m$}
+        {
+            $b_1 \gets$ CH($A)[k]$ \\
+            $l \gets$ line through $r$ and $b_1$ \\
+            \tcp{find 2 consecutive vertices $i, j \in$ CH($A$) such that $i$ and $j$ are} 
+            \tcp{on opposite sides of $l$.} 
+            $i, j \gets$ BinarySearch($l$, CH($A$)) \\
+            $b_{2\text{left}} \gets$ TernarySearch(CH($A$)$[1,...,i]$, AreaTriangle) \\
+            $b_{2\text{right}} \gets$ TernarySearch(CH($A$)$[j,...,m]$, AreaTriangle) \\
+            $b_{\text{max}} \gets$ max($b_{2\text{left}}, b_{2\text{right}}$) \\
+            \If {\upshape AreaTriangle($\triangle rb_1b_{\text{max}}) \geq$ MaxArea}
+            {
+                MaxArea $\gets$ AreaTriangle($\triangle rb_1b_{\text{max}})$ \\ 
+                MaxAreaTriangle $\gets \triangle rb_1b_{\text{max}}$ 
+            }
+        }
+        \Return MaxAreaTriangle
+        \caption{Maximum Area Bichromatic Triangle}
+    \end{algorithm}
+
+    \subsection*{Algorithm Correctness}
+
+
+    \subsection*{Running Time Analysis}
+    The outer loop loops over every vertex $b \in$ CH($A$).
+    This is an $O(n)$ number of vertices in CH($A$). 
+    Binary search to find the two consecutive vertices that are on opposite sides of $l$ can be done in $O(\log n)$.
+    Applying TernarySearch twice on points on the boundary of the convex hull can be done in $O(\log n)$ time complexity, since evaluating AreaTriangle (calculating the area of a triangle with given vertices) can be done in  $O(1)$ time complexity.
+    This means that the whole algorithm will run in $O(n\log n)$ time complexity.
+
+
+
+
 
 \end{document}
