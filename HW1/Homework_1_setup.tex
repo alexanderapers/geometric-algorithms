@@ -101,9 +101,9 @@
             $l \gets$ line through $r$ and $b_1$ \\
             \tcp{find 2 consecutive vertices $i, j \in$ CH($A$) such that $i$ and $j$ are} 
             \tcp{on opposite sides of $l$.} 
-            $i, j \gets$ BinarySearch($l$, CH($A$)) \\
-            $b_{2\text{left}} \gets$ TernarySearch(CH($A$)$[1,...,i]$, AreaTriangle) \\
-            $b_{2\text{right}} \gets$ TernarySearch(CH($A$)$[j,...,m]$, AreaTriangle) \\
+            $i, j \gets$ BinarySearch(CH($A$), $l$) \\
+            $b_{2\text{left}} \gets$ TernarySearch(CH($A$)$[k,...,i]$, AreaTriangle) \\
+            $b_{2\text{right}} \gets$ TernarySearch(CH($A$)$[j,...,m]\ \cup$ CH$[1,...,k-1]$, AreaTriangle) \\
             $b_{\text{max}} \gets$ max($b_{2\text{left}}, b_{2\text{right}}$) \\
             \If {\upshape AreaTriangle($\triangle rb_1b_{\text{max}}) \geq$ MaxArea}
             {
@@ -120,13 +120,9 @@
 
     \subsection*{Running Time Analysis}
     The outer loop loops over every vertex $b \in$ CH($A$).
-    This is an $O(n)$ number of vertices in CH($A$). 
-    Binary search to find the two consecutive vertices that are on opposite sides of $l$ can be done in $O(\log n)$.
-    Applying TernarySearch twice on points on the boundary of the convex hull can be done in $O(\log n)$ time complexity, since evaluating AreaTriangle (calculating the area of a triangle with given vertices) can be done in  $O(1)$ time complexity.
+    There is an $O(n)$ number of vertices in CH($A$). 
+    Binary search to find the two consecutive vertices in CH($A$) that are on opposite sides of $l$ can be done in $O(\log n)$.
+    Applying TernarySearch twice on points in CH($A$) on either side of $l$ can be done in $O(\log n)$ time complexity, since evaluating AreaTriangle (calculating the area of a triangle with given vertices) can be done in  $O(1)$ time complexity.
     This means that the whole algorithm will run in $O(n\log n)$ time complexity.
-
-
-
-
 
 \end{document}

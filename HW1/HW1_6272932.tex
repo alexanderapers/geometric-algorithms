@@ -1,0 +1,251 @@
+\documentclass{article}
+\usepackage{xspace}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{ifthen}
+\usepackage{totcount}
+\usepackage{algpseudocode}
+\usepackage[usenames,usedvpinames]{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{parskip}
+
+\graphicspath{ {./figures/} }
+
+%--------------------------------------------------------------------------------
+
+\newcommand{\edition}{2022-2023}
+\newcommand{\deadline}{25 November 2022, 13:15}
+\newcommand{\hwNum}{1}
+
+%--------------------------------------------------------------------------------
+% Style stuff
+\pagestyle{fancy}
+\lhead{Geometric Algorithms (INFOGA \edition)}
+\chead{id: 6272932}
+\rhead{\mytitle}
+\lfoot{INFOGA \edition}
+\cfoot{}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\familydefault}{\sfdefault}
+
+%--------------------------------------------------------------------------------
+% Question macro's
+
+\newcommand{\withpoints}[1]{%
+  \addtocounter{pointscounter}{#1} \printpoints{#1}
+}
+\newcommand{\printpoints}[1]{%
+   \ifthenelse{#1 = 0}
+              {}
+              {\textit{(#1 points)}}\mbox{}
+}
+
+
+
+\newenvironment{question}[1][0]{\begin{tcolorbox}[parbox=false
+                                      ,breakable=true
+                                      ,enhanced jigsaw
+                                      ,title=\bfseries Question
+                                      \stepcounter{questionscounter}\arabic{questionscounter}
+                                      \withpoints{#1}]
+                         }
+                         {\end{tcolorbox}}
+\newenvironment{subquestions}{\begin{enumerate}[leftmargin=*
+                                        ]}
+                             {\end{enumerate}}
+\newcommand{\subquestion}[1][0]{\item \withpoints{#1}}
+
+\newtotcounter{questionscounter}
+\newtotcounter{pointscounter}
+
+\newcommand{\numquestions}{\total{questionscounter}}
+\newcommand{\numpoints}{\total{pointscounter}}
+
+%--------------------------------------------------------------------------------
+\newcommand{\myremark}[3]{\textcolor{blue}{\textsc{#1 #2:}} \textcolor{red}{\textsf{#3}}}
+% \renewcommand{\myremark}[3]{}
+\newcommand{\frank}[2][says]{\myremark{Frank}{#1}{#2}}
+
+%--------------------------------------------------------------------------------
+% Theorem Environments
+\newtheorem{theorem} {Theorem}
+\newtheorem{lemma}[theorem] {Lemma}
+\newtheorem{corollary}[theorem] {Corollary}
+\newtheorem{problem}[theorem] {Problem}
+\newtheorem{observation}[theorem] {Observation}
+\newtheorem{claim}[theorem] {Claim}
+\newtheorem{invariant}[theorem] {Invariant}
+
+%--------------------------------------------------------------------------------
+% Otherwise useful Macro's
+\newcommand{\eps}{\ensuremath{\varepsilon}\xspace}
+\DeclareMathOperator{\argmin}{argmin}
+\DeclareMathOperator{\argmax}{argmax}
+
+\newcommand{\mkmbb}[1]{\ensuremath{\mathbb{#1}}\xspace}
+\newcommand{\R}{\mkmbb{R}}
+
+\newcommand{\mathfunc}[1]{\ensuremath{\mathit{#1}}\xspace}
+
+%--------------------------------------------------------------------------------
+
+\algrenewcommand{\algorithmiccomment}[1]{\hfill// #1}
+\newcommand{\CH}{\mathcal{C}\mathcal{H}}
+
+% The Actual document
+
+\newcommand{\mytitle}{Homework Exam \hwNum\xspace\edition}
+\title{\mytitle}
+\date{\textbf{Deadline: } \deadline}
+\author{Alexander Apers \\ 6272932}
+
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+  \noindent
+  This homework exam has \numquestions\xspace question for a total of
+  \numpoints\xspace points. You can earn an additional point by a careful
+  preparation of your hand-in: using a good layout, good spelling, good
+  figures, no sloppy notation, no statements like ``The algorithm runs in
+  $n\log n$.''  (forgetting the $O(..)$ and forgetting to say that it concerns
+  time), etc. Use lemmas, theorems, and figures where appropriate.
+
+  \begin{question}[9]
+    Let $r \in \R^2$ be a ``red'' point, and let $B$ be a set of $n$
+    ``blue'' points in $\R^2$. You can assume that the points are in
+    general position; meaning that no two points have the same
+    $x$-coordinate or the same $y$-coordinate, and that no three
+    points lie on a line. A triangle is ``bichromatic'' when its
+    vertices are either red or blue, and it has at least one vertex of
+    either color. Develop an $O(n\log n)$ time algorithm to find a
+    maximum area ``bichromatic'' triangle $\Delta^*$ on $\{r\},B$.
+
+    \textbf{Hint: } You can use the following fact. A function
+    $f [1..n] \to \R$ is \emph{unimodal} if (and only if) it has a
+    single (local) maximum. A maximum of $f$ can be computed in
+    $O(T\log n)$ time, where $T$ is the time it takes to evaluate a
+    single value $f(i)$ with $i \in [1..n]$. In particular, using the
+    following function \Call{TernarySearch}{$[1,n], f$}:
+
+    \begin{algorithmic}
+    \Function{TernarySearch}{$[a..b], f$}
+      \State $n \gets b - a$
+      \If{ $n < 3$ }
+        evaluate $f(i)$ for each $i \in [a..b]$ and return $\max_i f(i)$
+      \Else
+        \State $m_1 \gets a + \lfloor n/3  \rfloor$ ; $m_2 \gets a + \lfloor 2n/3 \rfloor$
+        \If{ $f(m_1) < f(m_2)$ }
+          \Call{TernarySearch}{$[m_1..,b], f$}
+        \Else
+          \Call{TernarySearch}{$[a..m_2], f$}
+        \EndIf
+      \EndIf
+    \EndFunction
+    \end{algorithmic}
+  \end{question}
+
+  \pagebreak
+
+  \section*{Solution to Question 1}
+  \subsection*{Definitions}
+  Let $A$ denote the set $\{r\} \cup B$ \\
+  Let $\CH(A)$ denote the convex hull of point set $A$ (including interior and edges) \\
+  Let CH($A$) denote the set of vertices that make up the edges of $\CH(A)$
+
+  \subsection*{Geometric Observations}
+  Since there is only one red point, it is clear that all bichromatic triangles contain exactly one red point and two blue points.
+  We start with the following observation. \\
+
+  \begin{lemma}
+  The maximum area bichromatic triangle must necessarily consist of 2 blue vertices, $b_1, b_2$ such that $b_1, b_2 \in$ CH($A$).
+  \end{lemma}
+
+  \begin{proof}
+      Suppose for contradiction that $b_1 \notin$ CH($A$). We denote the maximum area triangle $\triangle rb_1b_2$.
+      % We denote this triangle $\triangle rb_{1}b_{2}$, with the point $b_{2}$ not on the boundary of $\CH(A)$.
+      % We will show that the area of $\triangle rb_1b_2$ can be increased by using a vertex $x \in$ CH($A$) instead of $b_1$.
+      Imagine the line $l$ parallel to the line going through $r$ and $b_{2}$ which goes through the point $b_{1}$.
+      If we replace $b_{1}$ with any point on the other side of $l$ compared to where $r$ and $b_{2}$ are, the area of $\triangle rb_1b_2$ will increase as this point lies farther from the segment $\overline{rb_2}$ than $b_1$.
+      $l$ must cross the boundary of $\CH(A)$ in 2 locations since it goes through point $b_1 \in \CH(A)$ but $b_1 \notin$ CH($A$).
+      Therefore, there must be a least some point $x \in$ CH($A$) further away from $\overline{rb_2}$ than $b_1$ to connect the two points where $l$ crosses $\CH(A)$.
+      Therefore, it's guaranteed that $b_{1}$ can be replaced by at least one point $x \in$ CH($A$) so that the area of $\triangle rxb_2 > \triangle rb_1b_2$.
+      Hence, $\triangle rb_{1}b_{2}$ is not a maxmium area triangle. This is a contradiction, since we assumed $\triangle rb_1b_2$ had maximum area.
+      We conclude that $b_1 \in$ CH($A$) to be a maximum area triangle. 
+  \end{proof}
+
+  Similarly, it can be proven that $b_2 \in$ CH($A$).
+
+  \vspace{0.5cm}
+  \begin{lemma}
+      Given point $r$ and a point $b_1 \in$ CH($A$), and line $l$ going through them, 
+      TriangleArea($\triangle rb_1b_2$) is a unimodal function for $b_2 \in$ CH($A$) on one side of $l$.
+  \end{lemma}
+
+  \begin{proof}
+      The area of $\triangle rb_1b_2$ is defined as $d(r, b_1) \cdot d(b_2, \overline{rb_1})$. The only input to the function which changes is the point $b_2$. Therefore, the area of the triangle is determined by $b_2$.
+      If the set of vertices in CH($A$) on one side of $l$ is not empty, the distances $d(b_2, \overline{rb_1})$ have to be (1) monotonically non-decreasing, then (2) maximal, and finally (3) monotonically non-increasing, in that order when iterating through them in clockwise order.
+      If this is not the case you can find 3 consecutive points $x, y, z \in$ CH($A$) such that $d(y, \overline{rb_1}) < d(x, \overline{rb_1})$ and $d(y, \overline{rb_1}) < d(z, \overline{rb_1})$.
+      If this were the case then CH($A$) would contain vertices that create a non-convex polygon. 
+      Therefore, TriangleArea($\triangle rb_1b_2)$ is a unimodal function for $b_2 \in$ CH($A$) on one side of $l$.
+  \end{proof}
+
+  \subsection*{Algorithm Description}
+  % TODO add reference to algorithm
+  Finding the vertices that make up the boundary of the convex hull can be done in $O(n\log n)$ time complexity using the algorithm discussed in class.
+  These vertices will be given in clockwise (or counterclockwise) order. 
+  
+  The algorithm iterates through all points $b_1 \in$ CH($A$). For every point, the line $l$ is determined that goes through $r$ and $b_1$.
+  Then, CH($A$) is partitioned into a subset with points left of $l$ and a subset with points right of $l$. 
+  The consecutive points $i, j$ such that $i$ and $j$ are on opposite sides can be found using a simple BinarySearch. 
+  At every step, half of the input can be eliminated by evaluating which side of the line $l$ the middle point in the input is on. 
+  Since the AreaTriangle function is unimodal on both sides of the line, we apply TernarySearch once for both sides of $l$.
+  The largest of these two triangles is the maximum area triangle that uses the vertices $b_1$ and $r$. 
+  Since this is done for all $b_1 \in$ CH($A$), we simply have to keep track of the largest area triangle, which is returned at the end. \\
+
+  \pagebreak
+
+  \begin{algorithmic}
+    \Function{MaxAreaBichromaticTriangle}{$r, B,$ CH($A$)} 
+      \State MaxArea $\gets 0$ 
+      \State MaxAreaTriangle $\gets \triangle$ 
+      \For{$k \gets 1$ to $m$}
+        \State $b_2 \gets$ CH($A)[k]$ 
+        \State $l \gets$ line through $r$ and $b_1$ 
+        % \State \algorithmiccomment{find 2 consecutive vertices $i, j \in$ CH($A$) such that $i$ and $j$ are on opposite sides of $l$.} 
+        \State $i, j \gets$ BinarySearch(CH($A$), $l$) 
+        \State left $\gets$ subset of CH($A$) left of $l$
+        \State right $\gets$ subset of CH($A$) right of $l$
+        \State $b_{2\text{left}} \gets$ TernarySearch(left, AreaTriangle) 
+        \State $b_{2\text{right}} \gets$ TernarySearch(right, AreaTriangle) 
+        \State $b_{\text{max}} \gets$ max($b_{2\text{left}}, b_{2\text{right}}$) 
+        \If{AreaTriangle($\triangle rb_1b_{\text{max}}) \geq$ MaxArea}
+          \State MaxArea $\gets$ AreaTriangle($\triangle rb_1b_{\text{max}})$ 
+          \State MaxAreaTriangle $\gets \triangle rb_1b_{\text{max}}$ 
+        \EndIf
+      \EndFor
+    \EndFunction
+  \end{algorithmic}
+
+  \subsection*{Algorithm Correctness}
+  It is guaranteerd that the largest area bichromatic triangle is discovered by the algorithm.
+  This is because the two TernarySearch calls find the vertex $b_2$ such that $\triangle rb_1b_2$ has maximum area for every $b_1 \in$ CH($A$). 
+  TernarySearch can be applied using the AreaTriangle function and the given input due to \textbf{Lemma 2}.
+  \textbf{Lemma 2.} shows that the two blue points need to be on the edge of the convex hull to be the maximum area triangle.
+
+
+    \subsection*{Running Time Analysis}
+    The outer loop loops over every vertex $b_1 \in$ CH($A$).
+    There is an $O(n)$ number of vertices in CH($A$). 
+    Binary search to find the two consecutive vertices in CH($A$) that are on opposite sides of $l$ can be done in $O(\log n)$.
+    Applying TernarySearch twice on points in CH($A$) on either side of $l$ can be done in $O(\log n)$ time complexity, since evaluating AreaTriangle (calculating the area of a triangle with given vertices) can be done in  $O(1)$ time complexity.
+    This means that the whole algorithm will run in $O(n\log n)$ time complexity.
+
+
+\end{document}
