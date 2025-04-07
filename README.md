@@ -1,3 +1,3 @@
 # Geometric Algorithms Homework Exams
 
-Solved homework exams for the course geometric algorithms.
+Solved homework exams for the university course geometric algorithms.
